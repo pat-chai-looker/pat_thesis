@@ -24,11 +24,12 @@ include: "*.view"
 # }
 
 
-explore: user_playlists {
-  join: track_features {
+explore: user_playlists_2 {
+  join: track_features_2 {
+    # type: FULL OUTER???
     relationship: one_to_many
-    sql_on: ${user_playlists.track_id} = ${track_features.id} ;;
+    sql_on: ${user_playlists_2.track_id} = ${track_features_2.id} ;;
   }
 }
 
-explore: track_features {}
+explore: track_features_2 {}

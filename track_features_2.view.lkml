@@ -1,48 +1,24 @@
-view: track_features {
-sql_table_name: pat_thesis.track_features ;;
+view: track_features_2 {
+sql_table_name: pat_thesis.track_features_2 ;;
 
 
 
 #============================================= dimensions =============================================
 
-  dimension: acousticness {
-    type: number
-    sql: ${TABLE}.acousticness ;;
-  }
-
-  dimension: analysis_url {
-    type: string
-#     sql: ${TABLE}.analysis_url ;;
-  }
-
-  dimension: artistPopularity {
-    type: number
-    sql: ${TABLE}.artistPopularity ;;
-  }
-
-  dimension: danceability {
-    type: number
-    sql: ${TABLE}.danceability ;;
-  }
+  # dimension: artistPopularity {
+  #   type: number
+  #   sql: ${TABLE}.artistPopularity ;;
+  # }
 
   dimension: duration_ms {
     type: number
     sql: ${TABLE}.duration_ms ;;
   }
 
-  dimension: energy {
-    type: number
-    sql: ${TABLE}.energy ;;
-  }
-
   dimension: id {
     type: number
     sql: ${TABLE}.id ;;
-  }
-
-  dimension: instrumentalness {
-    type: number
-    sql: ${TABLE}.instrumentalness ;;
+    primary_key: yes
   }
 
   dimension: key {
@@ -50,24 +26,14 @@ sql_table_name: pat_thesis.track_features ;;
     sql: ${TABLE}.key ;;
   }
 
-  dimension: liveness {
-    type: number
-    sql: ${TABLE}.liveness ;;
-  }
-
-  dimension: loudness {
-    type: number
-    sql: ${TABLE}.loudness ;;
+  dimension: key_letters {
+    type: string
+    sql: ${TABLE}.key_letters ;;
   }
 
   dimension: mode {
     type: number
     sql: ${TABLE}.mode ;;
-  }
-
-  dimension: speechiness {
-    type: number
-    sql: ${TABLE}.speechiness ;;
   }
 
   dimension: tempo {
@@ -83,11 +49,6 @@ sql_table_name: pat_thesis.track_features ;;
   dimension: trackPopularity {
     type: number
     sql: ${TABLE}.trackPopularity ;;
-  }
-
-  dimension: track_href {
-    type: string
-    sql: ${TABLE}.track_href ;;
   }
 
   dimension: type {
@@ -106,11 +67,70 @@ sql_table_name: pat_thesis.track_features ;;
   }
 
 
+  #==================================== metrics
+
+  dimension: acousticness {
+    type: number
+    sql: ${TABLE}.acousticness ;;
+    group_label: "Metrics"
+  }
+
+  dimension: danceability {
+    type: number
+    sql: ${TABLE}.danceability ;;
+    group_label: "Metrics"
+  }
+
+  dimension: energy {
+    type: number
+    sql: ${TABLE}.energy ;;
+    group_label: "Metrics"
+  }
+
+  dimension: instrumentalness {
+    type: number
+    sql: ${TABLE}.instrumentalness ;;
+    group_label: "Metrics"
+  }
+
+  dimension: liveness {
+    type: number
+    sql: ${TABLE}.liveness ;;
+    group_label: "Metrics"
+  }
+
+  dimension: loudness {
+    type: number
+    sql: ${TABLE}.loudness ;;
+    group_label: "Metrics"
+  }
+
+  dimension: speechiness {
+    type: number
+    sql: ${TABLE}.speechiness ;;
+    group_label: "Metrics"
+  }
+
+  #==================================== links
+
+  dimension: analysis_url {
+    hidden: yes
+    type: string
+#     sql: ${TABLE}.analysis_url ;;
+  }
+
+  dimension: track_href {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.track_href ;;
+  }
+
 #============================================= measures =============================================
 
   measure: avg_track_popularity {
     type: average
     sql: ${trackPopularity} ;;
+    value_format_name: decimal_2
   }
 
   measure: avg_acousticness {
@@ -137,6 +157,13 @@ sql_table_name: pat_thesis.track_features ;;
     type: average
     sql: ${speechiness} ;;
   }
+
+  measure: avg_track_duration {
+    type: average
+    sql: ${duration_ms} ;;
+    value_format_name: decimal_2
+  }
+
 
   measure: count {
     type: count
