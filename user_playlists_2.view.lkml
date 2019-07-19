@@ -93,6 +93,16 @@ view: user_playlists_2 {
 
 
 
+  measure: single_viz_conditional {
+    type: average
+    sql: ${track_popularity} ;;
+    value_format_name: decimal_2
+    html:  {% if value < 50 %} <font color="darkgreen">{{ rendered_value }}</font>
+          {% else %}
+            <font color="darkred">{{ rendered_value }}</font>
+          {% endif %} ;;
+  }
+
 
 
 

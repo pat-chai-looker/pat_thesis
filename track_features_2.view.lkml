@@ -26,6 +26,16 @@ sql_table_name: pat_thesis.track_features_2 ;;
     sql: ${TABLE}.key ;;
   }
 
+  dimension: hierarchy_test {
+    type: number
+    sql: ${TABLE}.key ;;
+    html: {% if value == 0 %} "low"
+          {% elsif value == 1 %} "medium"
+          {% elsif value == 2 %} "high"
+          {% endif %}
+    ;;
+  }
+
   dimension: key_letters {
     type: string
     sql: ${TABLE}.key_letters ;;
@@ -83,9 +93,17 @@ sql_table_name: pat_thesis.track_features_2 ;;
 
   dimension: energy {
     type: number
-    sql: ${TABLE}.energy ;;
+    sql: CASE WHEN ${TABLE}.energy > 0.5 THEN 100
+    ELSE 200 END;;
     group_label: "Metrics"
+#     value_format: "0.#"
   }
+
+  measure: division {
+    type:  number
+    sql: ${energy} / ${key} ;;
+  }
+
 
   dimension: instrumentalness {
     type: number
@@ -146,6 +164,7 @@ sql_table_name: pat_thesis.track_features_2 ;;
   measure: avg_energy {
     type: average
     sql: ${energy} ;;
+    value_format: "0.#####"
   }
 
   measure: avg_instrumentalness {
