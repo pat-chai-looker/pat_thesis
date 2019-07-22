@@ -70,7 +70,7 @@ view: track_affinity {
         FROM ${playlist_track.SQL_TABLE_NAME} as op1
         JOIN ${playlist_track.SQL_TABLE_NAME} op2
         ON op1.playlist_id = op2.playlist_id
-        AND op1.playlist_id <> op2.playlist_id
+        AND op1.track_id <> op2.track_id
         GROUP BY product_a, product_b
       ) as prop
       JOIN ${total_track_counts.SQL_TABLE_NAME} as top1 ON prop.product_a = top1.track_name
