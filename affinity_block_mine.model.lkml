@@ -15,7 +15,7 @@ view: playlist_track {
       , date_track_added
       --, oi.inventory_item_id as inventory_item_id
       , track_name --as product
-      FROM user_playlists_2
+      FROM `lookerdata.pat_thesis.user_playlists_2`
       GROUP BY 1, 4, 3, 2
        ;;
   }
@@ -28,7 +28,7 @@ view: total_track_counts {
       track_name
       , concat(track_name, playlist_id) as concat_trackname_playlistid
       , count( concat(track_name, playlist_id)) as track_added_count
-      FROM user_playlists_2
+      FROM `lookerdata.pat_thesis.user_playlists_2`
       GROUP BY 1, 2
        ;;
   }
@@ -37,7 +37,7 @@ view: total_track_counts {
 view: total_playlists {
   derived_table: {
     sql: SELECT count(*) as count
-      FROM user_playlists_2
+      FROM `lookerdata.pat_thesis.user_playlists_2`
        ;;
   }
   dimension: count {
@@ -61,8 +61,8 @@ view: track_affinity {
     sql: SELECT product_a
       , product_b
       , joint_order_count       -- number of times both items are purchased together
-      , top1.product_order_count as product_a_order_count   -- total number of orders with product A in them
-      , top2.product_order_count as product_b_order_count   -- total number of orders with product B in them
+      , top1.track_added_count as product_a_order_count   -- total number of orders with product A in them
+      , top2.track_added_count as product_b_order_count   -- total number of orders with product B in them
       FROM (
         SELECT op1.track_name as product_a
         , op2.track_name as product_b
@@ -73,8 +73,8 @@ view: track_affinity {
         AND op1.playlist_id <> op2.playlist_id
         GROUP BY product_a, product_b
       ) as prop
-      JOIN ${total_track_counts.SQL_TABLE_NAME} as top1 ON prop.product_a = top1.product
-      JOIN ${total_track_counts.SQL_TABLE_NAME} as top2 ON prop.product_b = top2.product
+      JOIN ${total_track_counts.SQL_TABLE_NAME} as top1 ON prop.product_a = top1.track_name
+      JOIN ${total_track_counts.SQL_TABLE_NAME} as top2 ON prop.product_b = top2.track_name
       ORDER BY product_a, joint_order_count DESC, product_b
        ;;
   }
