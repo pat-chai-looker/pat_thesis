@@ -1,5 +1,5 @@
 view: user_playlists_2 {
-  sql_table_name: pat_thesis.user_playlists_2 ;;
+  sql_table_name: pat_thesis.user_playlists_4 ;;
 
   dimension: user_id {
     description: "owner of playlist"
@@ -116,5 +116,6 @@ view: user_playlists_2 {
 
   measure: count {
     type: count
+    drill_fields: [track_name, track_popularity, artist_name, album_name]
   }
 }

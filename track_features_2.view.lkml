@@ -1,5 +1,5 @@
 view: track_features_2 {
-sql_table_name: pat_thesis.track_features_2 ;;
+sql_table_name: pat_thesis.track_features_4 ;;
 
 
 
@@ -24,16 +24,6 @@ sql_table_name: pat_thesis.track_features_2 ;;
   dimension: key {
     type: number
     sql: ${TABLE}.key ;;
-  }
-
-  dimension: hierarchy_test {
-    type: number
-    sql: ${TABLE}.key ;;
-    html: {% if value == 0 %} "low"
-          {% elsif value == 1 %} "medium"
-          {% elsif value == 2 %} "high"
-          {% endif %}
-    ;;
   }
 
   dimension: key_letters {
@@ -93,8 +83,7 @@ sql_table_name: pat_thesis.track_features_2 ;;
 
   dimension: energy {
     type: number
-    sql: CASE WHEN ${TABLE}.energy > 0.5 THEN 100
-    ELSE 200 END;;
+    sql: ${TABLE}.energy ;;
     group_label: "Metrics"
 #     value_format: "0.#"
   }
@@ -159,12 +148,17 @@ sql_table_name: pat_thesis.track_features_2 ;;
   measure: avg_danceability {
     type: average
     sql: ${danceability} ;;
+    link: {
+      label: "Danceability Histogram"
+      url: "https://productday.dev.looker.com/explore/pat_thesis/user_playlists_2?qid=dMHDMdZ5rSZteeyU3fuFsk&origin_space=432&toggle=fil,vis"
+
+    }
   }
 
   measure: avg_energy {
     type: average
     sql: ${energy} ;;
-    value_format: "0.#####"
+#     value_format: "0.#####"
   }
 
   measure: avg_instrumentalness {
@@ -186,6 +180,35 @@ sql_table_name: pat_thesis.track_features_2 ;;
 
   measure: count {
     type: count
+  }
+
+
+
+#=================== test
+  dimension: danceability_tiers {
+    type: tier
+    sql: ${danceability}*100 ;;
+    tiers: [ 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95]
+    style: integer
+  }
+
+  dimension: case_when_test {
+    type: number
+    sql: CASE WHEN ${TABLE}.energy > 0.5 THEN 100
+      ELSE 200 END;;
+    group_label: "Metrics"
+#     value_format: "0.#"
+  }
+
+
+  dimension: hierarchy_test {
+    type: number
+    sql: ${TABLE}.key ;;
+    html: {% if value == 0 %} "low"
+          {% elsif value == 1 %} "medium"
+          {% elsif value == 2 %} "high"
+          {% endif %}
+    ;;
   }
 
 
