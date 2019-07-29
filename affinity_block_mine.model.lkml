@@ -10,7 +10,12 @@ explore: track_affinity {
   join: total_playlists {
     type: cross
     relationship: many_to_one
-  }
+    }
+
+  # join: user_playlists_2 {
+  #   sql_on: ${user_playlists_2.track_id} = ${track_affinity.track_id} ;;
+  # }
+
 
   # join: user_playlists_2 {
   #   sql_on: ${track_affinity.product_a} = ${user_playlists_2.track_name} ;;
@@ -86,7 +91,8 @@ view: track_affinity {
       , product_a_album_art
       , product_b_album_art
       , preview_url
-      , joint_order_count       -- number of times both items are purchased together
+      -- , track_id
+     , joint_order_count       -- number of times both items are purchased together
       , top1.track_added_count as product_a_order_count   -- total number of orders with product A in them
       , top2.track_added_count as product_b_order_count   -- total number of orders with product B in them
       FROM (
@@ -95,6 +101,7 @@ view: track_affinity {
         , op1.album_art as product_a_album_art
         , op2.album_art as product_b_album_art
         , op2.preview_url as preview_url
+        -- , op2.track_id as track_id
         , count(*) as joint_order_count
         FROM ${playlist_track.SQL_TABLE_NAME} as op1
         JOIN ${playlist_track.SQL_TABLE_NAME} op2
@@ -140,7 +147,11 @@ view: track_affinity {
   dimension: product_b {
     type: string
     sql: ${TABLE}.product_b ;;
-    html: <a href=${preview_url}> Sample </a> ;;
+    # link: {
+    #   label: "Sample Track"
+    #   url: "https://open.spotify.com/tracks/{{user_playlists_2.track_id}}"
+    #   # icon_url: "https://images.app.goo.gl/syq3W42T43ww53ZP7"
+    # }
   }
 
   dimension: joint_order_count {

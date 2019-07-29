@@ -34,10 +34,21 @@ view: user_playlists_2 {
     sql: ${TABLE}.track_id ;;
   }
 
+  dimension: preview_url {
+    type: string
+    sql: ${TABLE}.preview_url ;;
+    html: <a href="{{value}}">Sample Track</a> ;;
+  }
+
   dimension: track_name {
     type: string
     sql: ${TABLE}.track_name ;;
-    html: https://productday.dev.looker.com/dashboards/381?Track%20Name=...Baby%20One%20More%20Time&filter_config=%7B%22Track%20Name%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22...Baby%20One%20More%20Time%22%7D,%7B%7D%5D,%22id%22:33%7D%5D%7D ;;
+    link: {
+      label: "Sample Track"
+      url: "https://open.spotify.com/tracks/{{user_playlists_2.track_id}}"
+      icon_url: "https://images.app.goo.gl/syq3W42T43ww53ZP7"
+    }
+    # html: https://productday.dev.looker.com/dashboards/381?Track%20Name=...Baby%20One%20More%20Time&filter_config=%7B%22Track%20Name%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22...Baby%20One%20More%20Time%22%7D,%7B%7D%5D,%22id%22:33%7D%5D%7D ;;
   }
 
   dimension: track_popularity {
