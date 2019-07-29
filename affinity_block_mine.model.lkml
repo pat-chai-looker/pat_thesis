@@ -44,8 +44,9 @@ view: playlist_track {
       --, oi.inventory_item_id as inventory_item_id
       , track_name --as product
       , album_art
-      FROM `lookerdata.pat_thesis.user_playlists_2`
-      GROUP BY 1, 4, 3, 2, 5
+      , preview_url
+      FROM `lookerdata.pat_thesis.user_playlists_4`
+      GROUP BY 1, 4, 3, 2, 5, 6
       ;;
   }
 }
@@ -57,7 +58,7 @@ view: total_track_counts {
       track_name
       , concat(track_name, playlist_id) as concat_trackname_playlistid
       , count( concat(track_name, playlist_id)) as track_added_count
-      FROM `lookerdata.pat_thesis.user_playlists_2`
+      FROM `lookerdata.pat_thesis.user_playlists_4`
       GROUP BY 1, 2
       ;;
   }
@@ -66,7 +67,7 @@ view: total_track_counts {
 view: total_playlists {
   derived_table: {
     sql: SELECT count(*) as count
-      FROM `lookerdata.pat_thesis.user_playlists_2`
+      FROM `lookerdata.pat_thesis.user_playlists_4`
       ;;
   }
   dimension: count {
@@ -84,6 +85,7 @@ view: track_affinity {
       , product_b
       , product_a_album_art
       , product_b_album_art
+      , preview_url
       , joint_order_count       -- number of times both items are purchased together
       , top1.track_added_count as product_a_order_count   -- total number of orders with product A in them
       , top2.track_added_count as product_b_order_count   -- total number of orders with product B in them
@@ -92,12 +94,13 @@ view: track_affinity {
         , op2.track_name as product_b
         , op1.album_art as product_a_album_art
         , op2.album_art as product_b_album_art
+        , op2.preview_url as preview_url
         , count(*) as joint_order_count
         FROM ${playlist_track.SQL_TABLE_NAME} as op1
         JOIN ${playlist_track.SQL_TABLE_NAME} op2
         ON op1.playlist_id = op2.playlist_id
         AND op1.track_id <> op2.track_id
-        GROUP BY product_a, product_b, 3, 4
+        GROUP BY product_a, product_b, 3, 4, 5
       ) as prop
       JOIN ${total_track_counts.SQL_TABLE_NAME} as top1 ON prop.product_a = top1.track_name
       JOIN ${total_track_counts.SQL_TABLE_NAME} as top2 ON prop.product_b = top2.track_name
@@ -111,13 +114,22 @@ view: track_affinity {
   dimension: album_art_a {
     type: string
     sql: ${TABLE}.product_a_album_art ;;
-    html: <img src={{value}} width="280" height="280"/> ;;
+    html: <img src={{value}} width="160" height="160"/> ;;
   }
 
   dimension: album_art_b {
     type: string
     sql: ${TABLE}.product_b_album_art ;;
-    html: <img src={{value}} width="280" height="280"/> ;;
+    html: <img src={{value}} width="160" height="160"/> ;;
+  }
+
+  dimension: preview_url {
+    type: string
+    sql: ${TABLE}.preview_url ;;
+#     link: {
+#       label: "Sample Track"
+#       url: "{{value}}"
+#     }
   }
 
   dimension: product_a {
@@ -128,6 +140,7 @@ view: track_affinity {
   dimension: product_b {
     type: string
     sql: ${TABLE}.product_b ;;
+    html: <a href=${preview_url}> Sample </a> ;;
   }
 
   dimension: joint_order_count {
@@ -170,7 +183,7 @@ view: track_affinity {
     description: "How frequently orders include both product A and B as a percent of total orders"
     type: number
     sql: 1.0*${joint_order_count}/${total_playlists.count} ;;
-    html: <font color="#000000 " size="16" weight="bold"> {{rendered_value}} </font> ;;
+#     html: <font color="#000000 " size="16" weight="bold"> {{rendered_value}} </font> ;;
     value_format: "#.00%"
   }
 

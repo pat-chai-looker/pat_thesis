@@ -37,6 +37,7 @@ view: user_playlists_2 {
   dimension: track_name {
     type: string
     sql: ${TABLE}.track_name ;;
+    html: https://productday.dev.looker.com/dashboards/381?Track%20Name=...Baby%20One%20More%20Time&filter_config=%7B%22Track%20Name%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22...Baby%20One%20More%20Time%22%7D,%7B%7D%5D,%22id%22:33%7D%5D%7D ;;
   }
 
   dimension: track_popularity {
@@ -62,7 +63,7 @@ view: user_playlists_2 {
   dimension: album_art {
     type: string
     sql: ${TABLE}.album_art ;;
-    html: <img src={{value}} width="128" height="128"/> ;;
+    html: <img src={{value}} width="200" height="200"/> ;;
   }
 
   dimension_group: date_track_added {
@@ -104,7 +105,10 @@ view: user_playlists_2 {
   }
 
 
-
+  dimension: track_name_artist_name {
+    type: string
+    sql: CONCAT(${track_name}, " by ", ${artist_name}) ;;
+  }
 
 
 #   dimension_group: most_recent_purchase {

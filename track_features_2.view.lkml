@@ -12,7 +12,8 @@ sql_table_name: pat_thesis.track_features_4 ;;
 
   dimension: duration_ms {
     type: number
-    sql: ${TABLE}.duration_ms ;;
+    sql: ${TABLE}.duration_ms/60000 ;;
+    value_format_name: decimal_2
   }
 
   dimension: id {
@@ -39,6 +40,7 @@ sql_table_name: pat_thesis.track_features_4 ;;
   dimension: tempo {
     type: number
     sql: ${TABLE}.tempo ;;
+    value_format_name: decimal_0
   }
 
   dimension: time_signature {
@@ -143,11 +145,13 @@ sql_table_name: pat_thesis.track_features_4 ;;
   measure: avg_acousticness {
     type: average
     sql: ${acousticness} ;;
+    value_format_name: decimal_2
   }
 
   measure: avg_danceability {
     type: average
     sql: ${danceability} ;;
+    value_format_name: decimal_2
     link: {
       label: "Danceability Histogram"
       url: "https://productday.dev.looker.com/explore/pat_thesis/user_playlists_2?qid=dMHDMdZ5rSZteeyU3fuFsk&origin_space=432&toggle=fil,vis"
@@ -158,17 +162,20 @@ sql_table_name: pat_thesis.track_features_4 ;;
   measure: avg_energy {
     type: average
     sql: ${energy} ;;
+    value_format_name: decimal_2
 #     value_format: "0.#####"
   }
 
   measure: avg_instrumentalness {
     type: average
     sql: ${instrumentalness} ;;
+    value_format_name: decimal_2
   }
 
   measure: avg_speechiness {
     type: average
     sql: ${speechiness} ;;
+    value_format_name: decimal_2
   }
 
   measure: avg_track_duration {
@@ -211,7 +218,18 @@ sql_table_name: pat_thesis.track_features_4 ;;
     ;;
   }
 
+  dimension: maj_min {
+    type: string
+    sql:  CASE WHEN ${TABLE}.mode = 0 THEN "minor"
+        ELSE "Major"
+        END
+    ;;
+  }
 
+  dimension: key_and_mode {
+    type: string
+    sql: CONCAT(${key_letters}, ${maj_min}) ;;
+  }
 
 
 }
