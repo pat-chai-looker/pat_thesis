@@ -51,7 +51,7 @@ view: playlist_track {
       , track_name --as product
       , album_art
       , preview_url
-      FROM `lookerdata.pat_thesis.user_playlists_4`
+      FROM `lookerdata.pat_thesis.user_playlists_5`
       GROUP BY 1, 4, 3, 2, 5, 6
       ;;
   }
@@ -64,7 +64,7 @@ view: total_track_counts {
       track_name
       , concat(track_name, playlist_id) as concat_trackname_playlistid
       , count( concat(track_name, playlist_id)) as track_added_count
-      FROM `lookerdata.pat_thesis.user_playlists_4`
+      FROM `lookerdata.pat_thesis.user_playlists_5`
       GROUP BY 1, 2
       ;;
   }
@@ -73,7 +73,7 @@ view: total_track_counts {
 view: total_playlists {
   derived_table: {
     sql: SELECT count(*) as count
-      FROM `lookerdata.pat_thesis.user_playlists_4`
+      FROM `lookerdata.pat_thesis.user_playlists_5`
       ;;
   }
   dimension: count {

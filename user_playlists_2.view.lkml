@@ -1,5 +1,5 @@
 view: user_playlists_2 {
-  sql_table_name: pat_thesis.user_playlists_4 ;;
+  sql_table_name: pat_thesis.user_playlists_5 ;;
 
   dimension: user_id {
     description: "owner of playlist"
@@ -15,6 +15,10 @@ view: user_playlists_2 {
   dimension: playlist_name {
     type: string
     sql: ${TABLE}.playlist_name ;;
+    link: {
+      label: "Go to Dashboard"
+      url: "https://productday.dev.looker.com/dashboards/349?Playlist%20Name={{value}}"
+    }
   }
 
   dimension: playlist_image {
