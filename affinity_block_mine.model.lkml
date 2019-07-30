@@ -12,9 +12,10 @@ explore: track_affinity {
     relationship: many_to_one
     }
 
-  # join: user_playlists_2 {
-  #   sql_on: ${user_playlists_2.track_id} = ${track_affinity.track_id} ;;
-  # }
+  join: user_playlists_2 {
+    sql_on: ${user_playlists_2.track_id} = ${track_id} ;;
+    relationship: many_to_one
+  }
 
 
   # join: user_playlists_2 {
@@ -91,7 +92,7 @@ view: track_affinity {
       , product_a_album_art
       , product_b_album_art
       , preview_url
-      -- , track_id
+     , track_id
      , joint_order_count       -- number of times both items are purchased together
       , top1.track_added_count as product_a_order_count   -- total number of orders with product A in them
       , top2.track_added_count as product_b_order_count   -- total number of orders with product B in them
@@ -101,13 +102,13 @@ view: track_affinity {
         , op1.album_art as product_a_album_art
         , op2.album_art as product_b_album_art
         , op2.preview_url as preview_url
-        -- , op2.track_id as track_id
+       , op2.track_id as track_id
         , count(*) as joint_order_count
         FROM ${playlist_track.SQL_TABLE_NAME} as op1
         JOIN ${playlist_track.SQL_TABLE_NAME} op2
         ON op1.playlist_id = op2.playlist_id
         AND op1.track_id <> op2.track_id
-        GROUP BY product_a, product_b, 3, 4, 5
+        GROUP BY product_a, product_b, 3, 4, 5, 6
       ) as prop
       JOIN ${total_track_counts.SQL_TABLE_NAME} as top1 ON prop.product_a = top1.track_name
       JOIN ${total_track_counts.SQL_TABLE_NAME} as top2 ON prop.product_b = top2.track_name
@@ -144,14 +145,29 @@ view: track_affinity {
     sql: ${TABLE}.product_a ;;
   }
 
+  dimension: track_id {
+    type: string
+    sql: ${TABLE}.track_id ;;
+  }
+
   dimension: product_b {
+    label: "Similar Track"
     type: string
     sql: ${TABLE}.product_b ;;
-    # link: {
-    #   label: "Sample Track"
-    #   url: "https://open.spotify.com/tracks/{{user_playlists_2.track_id}}"
-    #   # icon_url: "https://images.app.goo.gl/syq3W42T43ww53ZP7"
-    # }
+    link: {
+      label: "Listen on Spotify"
+      url: "https://open.spotify.com/tracks/{{user_playlists_2.track_id}}"
+      icon_url: "https://storage.cloud.google.com/lookerdata-thesis/pat_thesis/733573.svg"
+    }
+    link: {
+      label: "Search in YouTube"
+      url: "https://www.youtube.com/results?search_query={{user_playlists_2.track_name}}+{{user_playlists_2.artist_name}}"
+      icon_url: "https://storage.cloud.google.com/lookerdata-thesis/pat_thesis/733590.svg"
+    }
+    link: {
+      label: "Filter in Dashboard"
+      url: "https://productday.dev.looker.com/dashboards/381?Track%20Name={{user_playlists_2.track_name}}&Artist%20Name={{user_playlists_2.artist_name}}"
+    }
   }
 
   dimension: joint_order_count {

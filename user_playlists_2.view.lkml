@@ -44,12 +44,22 @@ view: user_playlists_2 {
     type: string
     sql: ${TABLE}.track_name ;;
     link: {
-      label: "Sample Track"
+      label: "Listen on Spotify"
       url: "https://open.spotify.com/tracks/{{user_playlists_2.track_id}}"
-      icon_url: "https://images.app.goo.gl/syq3W42T43ww53ZP7"
+      icon_url: "https://storage.cloud.google.com/lookerdata-thesis/pat_thesis/733573.svg"
     }
-    # html: https://productday.dev.looker.com/dashboards/381?Track%20Name=...Baby%20One%20More%20Time&filter_config=%7B%22Track%20Name%22:%5B%7B%22type%22:%22%3D%22,%22values%22:%5B%7B%22constant%22:%22...Baby%20One%20More%20Time%22%7D,%7B%7D%5D,%22id%22:33%7D%5D%7D ;;
+    link: {
+      label: "Search in YouTube"
+      url: "https://www.youtube.com/results?search_query={{user_playlists_2.track_name}}+{{user_playlists_2.artist_name}}"
+      icon_url: "https://storage.cloud.google.com/lookerdata-thesis/pat_thesis/733590.svg"
+    }
+    link: {
+      label: "Filter in Dashboard"
+      url: "https://productday.dev.looker.com/dashboards/381?Track%20Name={{user_playlists_2.track_name}}&Artist%20Name={{user_playlists_2.artist_name}}"
+#       icon_url: "https://storage.cloud.google.com/lookerdata-thesis/pat_thesis/733590.svg"
+    }
   }
+
 
   dimension: track_popularity {
     type: number
