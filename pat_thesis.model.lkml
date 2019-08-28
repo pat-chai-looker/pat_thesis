@@ -23,6 +23,10 @@ include: "*.view"
 #   }
 # }
 
+# explore: explore_view_oldname {
+#   from: view_newname
+
+# }
 
 explore: user_playlists_2 {
   join: track_features_2 {
@@ -30,6 +34,38 @@ explore: user_playlists_2 {
     relationship: one_to_many
     sql_on: ${user_playlists_2.track_id} = ${track_features_2.id} ;;
   }
+
+  # conditionally_filter: {
+  #   filters: {
+  #     field: artist_name
+  #     value: "1UP"
+  #   }
+
+
+#   join: track_features_3 {
+#     sql: RIGHT JOIN pat_thesis.track_features_5 AS track_features_3
+#     on ${user_playlists_2.track_id} = track_features_3.id ;;
+#   }
+}
+
+
+# explore: fruits_logs {
+#   join: fruit_consumer_1 {
+#     relationship: one_to_many
+#     sql_on: ${fruits_logs.id} = ${fruit_consumer.fruit_id} ;;
+#   }
+#   join: fruit_consumer_2 {
+#     sql: RIGHT JOIN schemaname.tablename AS fruit_consumer_2
+#       on ${fruits_logs.id} = fruit_consumer_2.fruit_id ;;
+#   }
+# }
+
+
+
+
+
+view: fruit_consumer_2 {
+  sql_table_name: pat_thesis.track_features_5 ;;
 }
 
 explore: track_features_2 {}

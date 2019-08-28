@@ -93,9 +93,14 @@ view: user_playlists_2 {
 
   dimension_group: date_track_added {
     type: time
-    timeframes: [date, year, month]
+    timeframes: [date, year, month, week]
     sql: ${TABLE}.date_track_added  ;;
     datatype: timestamp
+  }
+
+  dimension: week_end {
+    type: date
+    sql: ${date_track_added_week} ;;
   }
 
 
@@ -146,5 +151,9 @@ view: user_playlists_2 {
   measure: count {
     type: count
     drill_fields: [track_name, track_popularity, artist_name, album_name]
+    link: {
+      label: "link label {{_filters['user_playlists_2.playlist_name']}}"
+      url: "https://productday.dev.looker.com/explore/pat_thesis/user_playlists_2?fields={{_field._name}},user_playlists_2.artist_name&f[user_playlists_2.playlist_name]=&sorts=user_playlists_2.avg_track_popularity+desc&limit=500&query_timezone=America%2FLos_Angeles&vis=%7B%7D&filter_config=%7B%22{{_filters['user_playlists_2.playlist_name']}}%22%3A%5B%7B%22type%22%3A%22%3D%22%2C%22values%22%3A%5B%7B%22constant%22%3A%22%22%7D%2C%7B%7D%5D%2C%22id%22%3A0%7D%5D%7D&origin=share-expanded"
+    }
   }
 }
